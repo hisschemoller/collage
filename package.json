@@ -1,0 +1,12 @@
+{
+    "name": "random-images",
+    "version": "0.0.1",
+    "main": "index.js",
+    "repository": "https://github.com/WouterHisschemoller/random-images.git",
+    "author": "Wouter Hisschemöller <wouter.hisschemoller@gmail.com>",
+    "license": "MIT",
+    "dependencies": {
+        "express": "^4.16.1"
+    },
+    "devDependencies": {}
+}
