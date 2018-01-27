@@ -1,11 +1,13 @@
 /**
  * @see https://stackoverflow.com/questions/40812254/how-to-get-a-random-image-from-the-images-directory-in-an-express-environment
+ * @see https://stackoverflow.com/questions/5827612/node-js-fs-readdir-recursive-directory-search
  */
 var express = require('express'),
     app = express(),
     server = require('http').createServer(app),
     fs = require('fs'),
-    imageArray;
+    imageDirectories,
+    allData = {};
 
 server.listen(3000);
 
@@ -14,25 +16,37 @@ app.get('/', function (req, res) {
 });
 
 app.get('/json', function (req, res) {
-    console.log('arr', imageArray);
-    res.json({images: imageArray});
+    res.json({images: allData});
 });
 
 app.use(express.static('dist'));
 
-getRandomFile().then(data => {
-    imageArray = data;
-});
+imageDirectories = [
+    '../../../Pictures/Google1/',
+    '../../../Pictures/Google2/',
+    '../../../Pictures/Google8/'
+];
 
-function getRandomFile() {
+getAllDirectories(imageDirectories, allData);
+
+function getAllDirectories(dirs, allData) {
+    let promise = getAllFiles(dirs[0], allData);
+    for (let i = 1, n = dirs.length; i < n; i++) {
+        promise = promise.then(results => {
+            return getAllFiles(dirs[i], allData);
+        });
+    }
+}
+
+function getAllFiles(dir, allData) {
     return new Promise((resolve, reject) => {
-        const imageDir = '../../../Pictures/Google8/',
-        imageArray = [];
-        fs.readdir(imageDir, (err, files) => {
+        let images = [];
+        fs.readdir(dir, (err, files) => {
             files.forEach(file => {
-                imageArray.push(file);
+                images.push(file);
             });
-            resolve(imageArray);
+            allData[dir] = images;
+            resolve();
         });
     });
 }
