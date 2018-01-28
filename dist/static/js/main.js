@@ -1,11 +1,16 @@
 document.addEventListener('DOMContentLoaded', function(e) {
-    let config;
+    let config,
+        canvas = document.getElementById('canvas'),
+        ctx = canvas.getContext('2d');
 
     const createCollage = () => {
         loadJSON('json?type=image').then(data => {
             console.log(data);
-            let image = new Image();
-            image.src = `image?dir=${data.dir}&img=${data.image}`;
+            let img = new Image();
+            img.src = `image?dir=${data.dir}&img=${data.image}`;
+            img.onload = () => {
+                ctx.drawImage(img, 0, 0);
+            }
         });
     };
     
@@ -25,6 +30,8 @@ document.addEventListener('DOMContentLoaded', function(e) {
     
     loadJSON('json?type=config').then(data => {
         config = data;
+        canvas.width = config.width;
+        canvas.height = config.height;
         document.getElementById('create-btn').addEventListener('click', createCollage);
     });
 });
