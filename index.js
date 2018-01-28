@@ -7,7 +7,7 @@ var express = require('express'),
     server = require('http').createServer(app),
     fs = require('fs'),
     path = require('path'),
-    imageDirectories,
+    config = require('./config.json'),
     allData = [];
 
 server.listen(3000);
@@ -17,11 +17,18 @@ app.get('/', function (req, res) {
 });
 
 app.get('/json', function (req, res) {
-    const data = allData[Math.floor(Math.random() * allData.length)];
-    res.json({
-        dir: data.dir,
-        image: data.images[Math.floor(Math.random() * data.images.length)]
-    });
+    switch (req.query.type) {
+        case 'image':
+            const data = allData[Math.floor(Math.random() * allData.length)];
+            res.json({
+                dir: data.dir,
+                image: data.images[Math.floor(Math.random() * data.images.length)]
+            });
+            break;
+        case 'config':
+            res.json(config);
+            break;
+    }
 });
 
 app.get('/image', function (req, res) {
@@ -31,13 +38,7 @@ app.get('/image', function (req, res) {
 
 app.use(express.static('dist'));
 
-imageDirectories = [
-    '../../../Pictures/Google1/',
-    '../../../Pictures/Google2/',
-    '../../../Pictures/Google8/'
-];
-
-getAllDirectories(imageDirectories, allData);
+getAllDirectories(config.imageDirectories, allData);
 
 function getAllDirectories(dirs, allData) {
     let promise = getAllFiles(dirs[0], allData);

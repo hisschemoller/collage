@@ -1,0 +1,9 @@
+{
+    "width": 800,
+    "height": 600,
+    "imageDirectories": [
+        "../../../Pictures/Google1/",
+        "../../../Pictures/Google2/",
+        "../../../Pictures/Google8/"
+    ]
+}
