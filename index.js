@@ -6,8 +6,9 @@ var express = require('express'),
     app = express(),
     server = require('http').createServer(app),
     fs = require('fs'),
+    path = require('path'),
     imageDirectories,
-    allData = {};
+    allData = [];
 
 server.listen(3000);
 
@@ -16,7 +17,16 @@ app.get('/', function (req, res) {
 });
 
 app.get('/json', function (req, res) {
-    res.json({images: allData});
+    const data = allData[Math.floor(Math.random() * allData.length)];
+    res.json({
+        dir: data.dir,
+        image: data.images[Math.floor(Math.random() * data.images.length)]
+    });
+});
+
+app.get('/image', function (req, res) {
+    const url = `${req.query.dir}${req.query.img}`;
+    res.sendFile(path.resolve(url));
 });
 
 app.use(express.static('dist'));
@@ -32,7 +42,7 @@ getAllDirectories(imageDirectories, allData);
 function getAllDirectories(dirs, allData) {
     let promise = getAllFiles(dirs[0], allData);
     for (let i = 1, n = dirs.length; i < n; i++) {
-        promise = promise.then(results => {
+        promise = promise.then(() => {
             return getAllFiles(dirs[i], allData);
         });
     }
@@ -45,7 +55,10 @@ function getAllFiles(dir, allData) {
             files.forEach(file => {
                 images.push(file);
             });
-            allData[dir] = images;
+            allData.push({
+                dir: dir,
+                images: images
+            }); 
             resolve();
         });
     });

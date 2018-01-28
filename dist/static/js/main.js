@@ -5,6 +5,9 @@ document.addEventListener('DOMContentLoaded', function(e) {
 function createCollage() {
     loadJSON().then(data => {
         console.log(data);
+        let image = new Image();
+        image.src = `image?dir=${data.dir}&img=${data.image}`;
+        console.log();
     });
 }
 
