@@ -19,11 +19,15 @@ app.get('/', function (req, res) {
 app.get('/json', function (req, res) {
     switch (req.query.type) {
         case 'image':
-            const data = allData[Math.floor(Math.random() * allData.length)];
-            res.json({
-                dir: data.dir,
-                image: data.images[Math.floor(Math.random() * data.images.length)]
-            });
+            const data = [];
+            for (let i = 0, n = req.query.amount; i < n; i++) {
+                let imgData = allData[Math.floor(Math.random() * allData.length)];
+                data.push({
+                    dir: imgData.dir,
+                    image: imgData.images[Math.floor(Math.random() * imgData.images.length)]
+                });
+            }
+            res.json(data);
             break;
         case 'config':
             res.json(config);
