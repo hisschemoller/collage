@@ -21,7 +21,22 @@ document.addEventListener('DOMContentLoaded', function(e) {
         const numImages = 3;
         loadJSON(`json?type=image&amount=${numImages}`).then(data => {
             loadAllImages(data, images).then(() => {
-                console.log(images);
+                setTimeout(function() {
+                    for (let i = 0, n = images.length; i < n; i++) {
+                        let img = images[i].image,
+                            sWidth = 100 + Math.random() * (img.width - 100),
+                            sHeight = 100 + Math.random() * (img.height - 100),
+                            sx = Math.random() * (img.width - sWidth),
+                            sy = Math.random() * (img.height - sHeight),
+                            scale = Math.random() * 1.4,
+                            dWidth = sWidth * scale,
+                            dHeight = sHeight * scale,
+                            dx = Math.random() * (canvas.width - dWidth),
+                            dy = Math.random() * (canvas.height - dHeight);
+                        // console.log(sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+                        ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+                    }
+                }, 200);
             });
         });
     };
@@ -30,9 +45,9 @@ document.addEventListener('DOMContentLoaded', function(e) {
         return new Promise((resolve, reject) => {
             let promise = loadImage(imageData, images, 0);
             for (let i = 1, n = imageData.length; i < n; i++) {
-                promise = promise.then(img => { loadImage(imageData, images, i) });
+                promise = promise.then(() => { loadImage(imageData, images, i) });
             }
-            promise.then(img => { resolve() });
+            promise.then(() => { resolve() });
         });
     };
 
