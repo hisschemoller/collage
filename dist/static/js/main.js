@@ -47,23 +47,38 @@ document.addEventListener('DOMContentLoaded', function(e) {
     };
     
     const drawAll = images => {
-        for (let i = 0, n = images.length; i < n; i++) {
-            if (!images[i]) {
-                return;
+        drawBackground(images[0]);
+        return;
+        for (let i = 1, n = images.length; i < n; i++) {
+            if (images[i]) {
+                let img = images[i],
+                    sWidth = 100 + Math.random() * (img.width - 100),
+                    sHeight = 100 + Math.random() * (img.height - 100),
+                    sx = Math.random() * (img.width - sWidth),
+                    sy = Math.random() * (img.height - sHeight),
+                    scale = Math.random() * 1.4,
+                    dWidth = sWidth * scale,
+                    dHeight = sHeight * scale,
+                    dx = Math.random() * (canvas.width - dWidth),
+                    dy = Math.random() * (canvas.height - dHeight);
+                // console.log(sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+                ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
             }
-            let img = images[i],
-                sWidth = 100 + Math.random() * (img.width - 100),
-                sHeight = 100 + Math.random() * (img.height - 100),
-                sx = Math.random() * (img.width - sWidth),
-                sy = Math.random() * (img.height - sHeight),
-                scale = Math.random() * 1.4,
-                dWidth = sWidth * scale,
-                dHeight = sHeight * scale,
-                dx = Math.random() * (canvas.width - dWidth),
-                dy = Math.random() * (canvas.height - dHeight);
-            // console.log(sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
-            ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
         }
+    };
+
+    const drawBackground = img => {
+        let sWidth = 100 + Math.random() * (img.width - 100),
+            sHeight = 100 + Math.random() * (img.height - 100),
+            sx = Math.random() * (img.width - sWidth),
+            sy = Math.random() * (img.height - sHeight),
+            scale = Math.max(canvas.width / sWidth, canvas.height / sHeight),
+            dWidth = sWidth * scale,
+            dHeight = sHeight * scale,
+            dx = 0,
+            dy = 0;
+        // console.log(sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+        ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
     };
     
     init();
