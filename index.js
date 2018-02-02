@@ -63,8 +63,10 @@ function getAllFiles(dir, allData) {
     return new Promise((resolve, reject) => {
         let images = [];
         fs.readdir(dir, (err, files) => {
-            files.forEach(file => {
-                images.push(file);
+            files.forEach(filename => {
+                if ((/[^\s]+(\.(jpg|jpeg|png|gif|bmp))$/).test(filename)) {
+                    images.push(filename);
+                }
             });
             allData.push({
                 dir: dir,
