@@ -48,6 +48,9 @@ document.addEventListener('DOMContentLoaded', function(e) {
     
     const drawAll = images => {
         for (let i = 0, n = images.length; i < n; i++) {
+            if (!images[i]) {
+                return;
+            }
             let img = images[i],
                 sWidth = 100 + Math.random() * (img.width - 100),
                 sHeight = 100 + Math.random() * (img.height - 100),

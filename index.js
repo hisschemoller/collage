@@ -8,7 +8,8 @@ var express = require('express'),
     fs = require('fs'),
     path = require('path'),
     config = require('./config.json'),
-    allData = [];
+    allData = [],
+    numImages = 0;
 
 server.listen(3000);
 
@@ -21,10 +22,15 @@ app.get('/json', function (req, res) {
         case 'image':
             const data = [];
             for (let i = 0, n = req.query.amount; i < n; i++) {
-                let imgData = allData[Math.floor(Math.random() * allData.length)];
-                data.push({
-                    dir: imgData.dir,
-                    image: imgData.images[Math.floor(Math.random() * imgData.images.length)]
+                const imgIndex = Math.floor(Math.random() * numImages);
+                console.log('imgIndex', imgIndex);
+                allData.forEach(dirData => {
+                    if (imgIndex >= dirData.startIndex && imgIndex < dirData.startIndex + dirData.images.length) {
+                        data.push({
+                            dir: dirData.dir,
+                            image: dirData.images[imgIndex - dirData.startIndex]
+                        });
+                    }
                 });
             }
             res.json(data);
@@ -62,8 +68,11 @@ function getAllFiles(dir, allData) {
             });
             allData.push({
                 dir: dir,
-                images: images
-            }); 
+                images: images,
+                startIndex: numImages
+            });
+            numImages += files.length;
+            console.log('numImages', numImages);
             resolve();
         });
     });
