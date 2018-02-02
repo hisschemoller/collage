@@ -2,8 +2,6 @@
     "width": 1000,
     "height": 600,
     "imageDirectories": [
-        "../../../Pictures/Google1/",
-        "../../../Pictures/Google2/",
-        "../../../Pictures/Google8/"
+        "../../path/to/image.jpg"
     ]
 }
