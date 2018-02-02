@@ -11,12 +11,12 @@ document.addEventListener('DOMContentLoaded', function(e) {
             canvas.height = config.height;
             ctx = canvas.getContext('2d');
             document.getElementById('create-btn').addEventListener('click', createCollage);
-            document.addEventListener('keyup', e => { e.keyCode === 13 ? createCollage() : null });
+            document.addEventListener('keyup', e => { e.keyCode === 39 ? createCollage() : null });
         });
     };
 
     const createCollage = () => {
-        const numImages = 3;
+        const numImages = 5;
         loadJSON(`json?type=image&amount=${numImages}`).then(data => {
             console.log(data);
             Promise.all(data.map(loadImage)).then(drawAll);
