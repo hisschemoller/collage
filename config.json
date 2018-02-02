@@ -2,6 +2,6 @@
     "width": 1000,
     "height": 600,
     "imageDirectories": [
-        "../../path/to/image.jpg"
+        "../../path/to/an/image/directory/"
     ]
 }
