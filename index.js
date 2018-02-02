@@ -23,7 +23,6 @@ app.get('/json', function (req, res) {
             const data = [];
             for (let i = 0, n = req.query.amount; i < n; i++) {
                 const imgIndex = Math.floor(Math.random() * numImages);
-                console.log('imgIndex', imgIndex);
                 allData.forEach(dirData => {
                     if (imgIndex >= dirData.startIndex && imgIndex < dirData.startIndex + dirData.images.length) {
                         data.push({
@@ -48,18 +47,21 @@ app.get('/image', function (req, res) {
 
 app.use(express.static('dist'));
 
-getAllDirectories(config.imageDirectories, allData);
+getAllDirectories(config.imageDirectories);
 
-function getAllDirectories(dirs, allData) {
-    let promise = getAllFiles(dirs[0], allData);
-    for (let i = 1, n = dirs.length; i < n; i++) {
-        promise = promise.then(() => {
-            return getAllFiles(dirs[i], allData);
+function getAllDirectories(dirs) {
+    Promise.all(dirs.map(getAllFiles)).then(() => {
+        numImages = 0;
+        allData.forEach(dirData => {
+            dirData.startIndex = numImages;
+            numImages += dirData.images.length;
+            console.log(`dirData: ${dirData.startIndex} - ${dirData.images.length} - ${numImages}`);
         });
-    }
+        console.log('numImages', numImages);
+    });
 }
 
-function getAllFiles(dir, allData) {
+function getAllFiles(dir) {
     return new Promise((resolve, reject) => {
         let images = [];
         fs.readdir(dir, (err, files) => {
@@ -70,11 +72,8 @@ function getAllFiles(dir, allData) {
             });
             allData.push({
                 dir: dir,
-                images: images,
-                startIndex: numImages
+                images: images
             });
-            numImages += files.length;
-            console.log('numImages', numImages);
             resolve();
         });
     });
