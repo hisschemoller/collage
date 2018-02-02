@@ -66,7 +66,7 @@ function getAllFiles(dir) {
         let images = [];
         fs.readdir(dir, (err, files) => {
             files.forEach(filename => {
-                if ((/[^\s]+(\.(jpg|jpeg|png|gif|bmp))$/).test(filename)) {
+                if ((/[^\s]+(\.(jpg|jpeg|png|gif|bmp))$/i).test(filename)) {
                     images.push(filename);
                 }
             });
