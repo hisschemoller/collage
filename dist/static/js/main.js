@@ -48,8 +48,9 @@ document.addEventListener('DOMContentLoaded', function(e) {
     
     const drawAll = images => {
         drawBackground(images[0]);
+        drawMidDistance(images[1]);
         return;
-        for (let i = 1, n = images.length; i < n; i++) {
+        for (let i = 2, n = images.length; i < n; i++) {
             if (images[i]) {
                 let img = images[i],
                     sWidth = 100 + Math.random() * (img.width - 100),
@@ -77,9 +78,25 @@ document.addEventListener('DOMContentLoaded', function(e) {
             dHeight = sHeight * scale,
             dx = 0,
             dy = 0;
-        // console.log(sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
         ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
     };
+
+    const drawMidDistance = img => {
+        let sWidth = 100 + Math.random() * (img.width - 100),
+            sHeight = 100 + Math.random() * (img.height - 100),
+            sx = Math.random() * (img.width - sWidth),
+            sy = Math.random() * (img.height - sHeight),
+            scale = Math.max(canvas.width / sWidth, canvas.height / sHeight),
+            dWidth = sWidth * scale,
+            dHeight = sHeight * scale,
+            isLeft = !!Math.round(Math.random()),
+            xPosition = (canvas.width / 4) + (Math.random() * (canvas.width / 2))
+            dx = isLeft ? xPosition - dWidth : xPosition,
+            dy = 0;
+        
+        // console.log(sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+        ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+    }
     
     init();
 });
