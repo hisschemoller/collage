@@ -1,3 +1,7 @@
+/**
+ * @see https://jmperezperez.com/drawing-edges-svg/
+ */
+
 document.addEventListener('DOMContentLoaded', function(e) {
     let config,
         canvas,
@@ -48,37 +52,22 @@ document.addEventListener('DOMContentLoaded', function(e) {
     
     const drawAll = images => {
         drawBackground(images[0]);
-        drawMidDistance(images[1]);
-        drawCloseDistance(images[2]);
-        return;
-        for (let i = 2, n = images.length; i < n; i++) {
-            if (images[i]) {
-                let img = images[i],
-                    sWidth = 100 + Math.random() * (img.width - 100),
-                    sHeight = 100 + Math.random() * (img.height - 100),
-                    sx = Math.random() * (img.width - sWidth),
-                    sy = Math.random() * (img.height - sHeight),
-                    scale = Math.random() * 1.4,
-                    dWidth = sWidth * scale,
-                    dHeight = sHeight * scale,
-                    dx = Math.random() * (canvas.width - dWidth),
-                    dy = Math.random() * (canvas.height - dHeight);
-                // console.log(sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
-                ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
-            }
-        }
+        // drawMidDistance(images[1]);
+        // drawCloseDistance(images[2]);
     };
 
     const drawBackground = img => {
-        let sWidth = 100 + Math.random() * (img.width - 100),
-            sHeight = 100 + Math.random() * (img.height - 100),
+        let sWidth = 100 + (Math.random() * (img.width - 100)),
+            sHeight = (canvas.height / canvas.width) * sWidth; // 100 + (Math.random() * (img.height - 100)),
             sx = Math.random() * (img.width - sWidth),
             sy = Math.random() * (img.height - sHeight),
-            scale = Math.max(canvas.width / sWidth, canvas.height / sHeight),
+            scale = Math.max(1, Math.max(canvas.width / sWidth, canvas.height / sHeight)),
             dWidth = sWidth * scale,
             dHeight = sHeight * scale,
-            dx = 0,
-            dy = 0;
+            dx = Math.random() * (canvas.width - dWidth),
+            dy = (canvas.height / 2) - (dHeight / 2);
+        console.log(Math.round(sx), Math.round(sy), Math.round(sWidth), Math.round(sHeight), Math.round(dx), Math.round(dy), Math.round(dWidth), Math.round(dHeight), scale);
+        console.log((sHeight / sWidth).toFixed(3), (dHeight / dWidth).toFixed(3));
         ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
     };
 
@@ -87,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
             sHeight = 100 + Math.random() * (img.height - 100),
             sx = Math.random() * (img.width - sWidth),
             sy = Math.random() * (img.height - sHeight),
-            scale = Math.max(canvas.width / sWidth, canvas.height / sHeight),
+            scale = Math.max(1, Math.max(canvas.width / sWidth, canvas.height / sHeight)),
             dWidth = sWidth * scale,
             dHeight = sHeight * scale,
             isLeft = !!Math.round(Math.random()),
@@ -102,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
             sHeight = 100 + Math.random() * (img.height - 100),
             sx = Math.random() * (img.width - sWidth),
             sy = Math.random() * (img.height - sHeight),
-            scale = Math.max(canvas.width / sWidth, canvas.height / sHeight),
+            scale = Math.max(1, Math.max(canvas.width / sWidth, canvas.height / sHeight)),
             dWidth = sWidth * scale,
             dHeight = sHeight * scale,
             isLeft = !!Math.round(Math.random()),
@@ -117,4 +106,3 @@ document.addEventListener('DOMContentLoaded', function(e) {
     
     init();
 });
-
