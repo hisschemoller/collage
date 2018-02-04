@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
             ctx = canvas.getContext('2d');
             document.getElementById('create-btn').addEventListener('click', createCollage);
             document.addEventListener('keyup', e => { e.keyCode === 39 ? createCollage() : null });
+            createCollage();
         });
     };
 
