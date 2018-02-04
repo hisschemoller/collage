@@ -80,10 +80,40 @@ document.addEventListener('DOMContentLoaded', function(e) {
             dWidth = sWidth * scale,
             dHeight = sHeight * scale,
             isLeft = !!Math.round(Math.random()),
-            xPosition = (canvas.width / 4) + (Math.random() * (canvas.width / 2))
-            dx = isLeft ? xPosition - dWidth : xPosition,
-            dy = (canvas.height / 2) - (dHeight / 2);
+            xPosition = (canvas.width / 4) + (Math.random() * (canvas.width / 2)),
+            dx = isLeft ? canvas.width - xPosition - dWidth : xPosition,
+            dy = (canvas.height / 2) - (dHeight / 2),
+            x, y, w, h;
+        
+        ctx.save();
+        ctx.beginPath();
+        if (isLeft) {
+            x = 0;
+            y = 0;
+            w = dWidth + dx;
+            h = canvas.height;
+            ctx.lineTo(x + w - 100, y);
+            ctx.lineTo(x + w, y + h);
+            ctx.lineTo(x, y + h);
+            ctx.lineTo(x, y);
+            
+        } else {
+            x = dx;
+            y = 0;
+            w = canvas.width - dx;
+            h = canvas.height
+            ctx.moveTo(x + 100, y);
+            ctx.lineTo(x + w, y);
+            ctx.lineTo(x + w, y + h);
+            ctx.lineTo(x, y + h);
+            ctx.lineTo(x + 100, y);
+        }
+        console.log(x, y, w, h);
+        ctx.clip();
+        // ctx.fillStyle = '#ffff00';
+        // ctx.fillRect(x, y, w, h);
         ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+        ctx.restore();
     }
     
     const drawCloseDistance = img => {
