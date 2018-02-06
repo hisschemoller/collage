@@ -52,9 +52,22 @@ document.addEventListener('DOMContentLoaded', function(e) {
     };
     
     const drawAll = images => {
-        drawBackground(images[0]);
-        drawMidDistance(images[1]);
-        drawCloseDistance(images[2]);
+        for (let i = 0, n = images.length, num = 0; i < n; i++) {
+            if (images[i]) {
+                switch (num) {
+                    case 0:
+                        drawBackground(images[i]);
+                        break;
+                    case 1:
+                        drawMidDistance(images[i]);
+                        break;
+                    case 2:
+                        drawCloseDistance(images[i]);
+                        break;
+                }
+                num++;
+            }
+        }
     };
 
     const drawBackground = img => {
