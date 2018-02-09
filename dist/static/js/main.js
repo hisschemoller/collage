@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
     };
 
     const drawMidDistance = img => {
-        const clipWidth = (canvas.width / 4) + (Math.random() * (canvas.width / 2)),
+        const clipWidth = (canvas.width * 0.2) + (Math.random() * (canvas.width * 0.6)),
             clipHeight = canvas.height,
             isLeft = !!Math.round(Math.random());
         
@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
     }
     
     const drawCloseDistance = img => {
-        const clipWidth = (canvas.width * 0.2) + (Math.random() * (canvas.width * 0.3)),
+        const clipWidth = (canvas.width * 0.2) + (Math.random() * (canvas.width * 0.4)),
             clipHeight = canvas.height,
             isLeft = !!Math.round(Math.random());
         
@@ -120,8 +120,8 @@ document.addEventListener('DOMContentLoaded', function(e) {
             y = 0,
             w = clipWidth,
             h = canvas.height,
-            hasMidPoint = Math.random() > 0.5,
-            inSet = (Math.random() * 0.5) * clipWidth,
+            hasMidPoint = Math.random() > 0.3,
+            inSet = (Math.random() * 0.7) * clipWidth,
             topInset = Math.round(Math.random()) * inSet,
             midInset = Math.round(Math.random()) * inSet,
             btmInset = Math.round(Math.random()) * inSet;
