@@ -84,35 +84,45 @@ document.addEventListener('DOMContentLoaded', function(e) {
     };
 
     const drawMidDistance = img => {
-        let sWidth = 100 + Math.random() * (img.width - 100),
-            sHeight = Math.min(sWidth, img.height),
-            sx = Math.random() * (img.width - sWidth),
-            sy = (img.height / 2) - (sHeight / 2),
-            scale = Math.max(1, Math.max(canvas.width / sWidth, canvas.height / sHeight)),
-            dWidth = sWidth * scale,
-            dHeight = sHeight * scale,
-            isLeft = !!Math.round(Math.random()),
-            xPosition = (canvas.width / 4) + (Math.random() * (canvas.width / 2)),
-            dx = isLeft ? canvas.width - xPosition - dWidth : xPosition,
-            dy = (canvas.height / 2) - (dHeight / 2),   
-            x, y, w, h,
-            isStraight = Math.random() > 0.8,
+        const clipWidth = (canvas.width * 0.7) + (Math.random() * (canvas.width * 0.3)),
+            clipHeight = canvas.height,
+            isLeft = !!Math.round(Math.random());
+        
+        createPath(clipWidth, clipHeight, isLeft);
+        ({sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight} = processImage(img, clipWidth, clipHeight, isLeft));
+        ctx.save();
+        ctx.clip();
+        ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+        ctx.restore();
+    }
+    
+    const drawCloseDistance = img => {
+        const clipWidth = (canvas.width / 4) + (Math.random() * (canvas.width / 2)),
+            clipHeight = canvas.height,
+            isLeft = !!Math.round(Math.random());
+        
+        createPath(clipWidth, clipHeight, isLeft);
+        ({sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight} = processImage(img, clipWidth, clipHeight, isLeft));
+        ctx.save();
+        ctx.clip();
+        ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+        ctx.restore();
+    };
+
+
+    const createPath = (clipWidth, clipHeight, isLeft) => {
+        const x = isLeft ? 0 : canvas.width - clipWidth;
+            y = 0;
+            w = isLeft ? clipWidth : canvas.width - clipWidth;
+            h = canvas.height;
             hasMidPoint = Math.random() > 0.5,
-            inSet = 0.5 + (Math.random() * 0.5),
+            inSet = (0.5 + (Math.random() * 0.5)) * clipWidth,
             topInset = Math.round(Math.random()) * inSet,
             midInset = Math.round(Math.random()) * inSet,
             btmInset = Math.round(Math.random()) * inSet;
         
-        ctx.save();
         ctx.beginPath();
         if (isLeft) {
-            x = 0;
-            y = 0;
-            w = dWidth + dx;
-            h = canvas.height;
-            topInset *= w;
-            midInset *= w;
-            btmInset *= w;
             ctx.lineTo(x + w - topInset, y);
             if (hasMidPoint) {
                 ctx.lineTo(x + w - midInset, y + (h / 2));
@@ -120,15 +130,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
             ctx.lineTo(x + w - btmInset, y + h);
             ctx.lineTo(x, y + h);
             ctx.lineTo(x, y);
-            
         } else {
-            x = dx;
-            y = 0;
-            w = canvas.width - dx;
-            h = canvas.height
-            topInset *= w;
-            midInset *= w;
-            btmInset *= w;
             ctx.moveTo(x + topInset, y);
             ctx.lineTo(x + w, y);
             ctx.lineTo(x + w, y + h);
@@ -138,28 +140,21 @@ document.addEventListener('DOMContentLoaded', function(e) {
             }
             ctx.lineTo(x + topInset, y);
         }
-        ctx.clip();
-        console.log(topInset, midInset, btmInset);
-        // ctx.fillStyle = '#ffff00';
-        // ctx.fillRect(x, y, w, h);
-        ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
-        ctx.restore();
-    }
-    
-    const drawCloseDistance = img => {
-        let sWidth = 100 + Math.random() * (img.width - 100),
+    };
+
+    const processImage = (img, clipWidth, clipHeight, isLeft) => {
+        const sWidth = 100 + Math.random() * (img.width - 100),
             sHeight = Math.min(sWidth, img.height),
             sx = Math.random() * (img.width - sWidth),
             sy = (img.height / 2) - (sHeight / 2),
-            scale = Math.max(1, Math.max(canvas.width / sWidth, canvas.height / sHeight)),
+            scale = Math.max(1, Math.max(clipWidth / sWidth, clipHeight / sHeight)),
             dWidth = sWidth * scale,
             dHeight = sHeight * scale,
-            isLeft = !!Math.round(Math.random()),
-            xPosition = (canvas.width * 0.7) + (Math.random() * (canvas.width * 0.3))
-            dx = isLeft ? canvas.width - xPosition - dWidth : xPosition,
+            dx = isLeft ? 0 : canvas.width - clipWidth,
             dy = (canvas.height / 2) - (dHeight / 2);
-        ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
-    }
+
+        return {sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight};
+    };
     
     init();
 });
