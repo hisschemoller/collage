@@ -84,19 +84,6 @@ document.addEventListener('DOMContentLoaded', function(e) {
     };
 
     const drawMidDistance = img => {
-        const clipWidth = (canvas.width * 0.7) + (Math.random() * (canvas.width * 0.3)),
-            clipHeight = canvas.height,
-            isLeft = !!Math.round(Math.random());
-        
-        createPath(clipWidth, clipHeight, isLeft);
-        ({sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight} = processImage(img, clipWidth, clipHeight, isLeft));
-        ctx.save();
-        ctx.clip();
-        ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
-        ctx.restore();
-    }
-    
-    const drawCloseDistance = img => {
         const clipWidth = (canvas.width / 4) + (Math.random() * (canvas.width / 2)),
             clipHeight = canvas.height,
             isLeft = !!Math.round(Math.random());
@@ -107,16 +94,34 @@ document.addEventListener('DOMContentLoaded', function(e) {
         ctx.clip();
         ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
         ctx.restore();
+        ctx.lineWidth = 8;
+        // ctx.strokeStyle = '#ff0000';
+        // ctx.stroke();
+    }
+    
+    const drawCloseDistance = img => {
+        const clipWidth = (canvas.width * 0.2) + (Math.random() * (canvas.width * 0.3)),
+            clipHeight = canvas.height,
+            isLeft = !!Math.round(Math.random());
+        
+        createPath(clipWidth, clipHeight, isLeft);
+        ({sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight} = processImage(img, clipWidth, clipHeight, isLeft));
+        ctx.save();
+        ctx.clip();
+        ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+        ctx.restore();
+        // ctx.strokeStyle = '#00ff00';
+        // ctx.stroke();
     };
 
 
     const createPath = (clipWidth, clipHeight, isLeft) => {
-        const x = isLeft ? 0 : canvas.width - clipWidth;
-            y = 0;
-            w = isLeft ? clipWidth : canvas.width - clipWidth;
-            h = canvas.height;
+        const x = isLeft ? 0 : canvas.width - clipWidth,
+            y = 0,
+            w = clipWidth,
+            h = canvas.height,
             hasMidPoint = Math.random() > 0.5,
-            inSet = (0.5 + (Math.random() * 0.5)) * clipWidth,
+            inSet = (Math.random() * 0.5) * clipWidth,
             topInset = Math.round(Math.random()) * inSet,
             midInset = Math.round(Math.random()) * inSet,
             btmInset = Math.round(Math.random()) * inSet;
@@ -140,6 +145,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
             }
             ctx.lineTo(x + topInset, y);
         }
+        ctx.closePath();
     };
 
     const processImage = (img, clipWidth, clipHeight, isLeft) => {
