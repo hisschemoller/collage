@@ -80,8 +80,6 @@ document.addEventListener('DOMContentLoaded', function(e) {
             dHeight = sHeight * scale,
             dx = Math.random() * (canvas.width - dWidth),
             dy = (canvas.height / 2) - (dHeight / 2);
-        // console.log(Math.round(sx), Math.round(sy), Math.round(sWidth), Math.round(sHeight), Math.round(dx), Math.round(dy), Math.round(dWidth), Math.round(dHeight), scale);
-        // console.log((sHeight / sWidth).toFixed(3), (dHeight / dWidth).toFixed(3));
         ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
     };
 
@@ -96,8 +94,14 @@ document.addEventListener('DOMContentLoaded', function(e) {
             isLeft = !!Math.round(Math.random()),
             xPosition = (canvas.width / 4) + (Math.random() * (canvas.width / 2)),
             dx = isLeft ? canvas.width - xPosition - dWidth : xPosition,
-            dy = (canvas.height / 2) - (dHeight / 2),
-            x, y, w, h;
+            dy = (canvas.height / 2) - (dHeight / 2),   
+            x, y, w, h,
+            isStraight = Math.random() > 0.8,
+            hasMidPoint = Math.random() > 0.5,
+            inSet = 0.5 + (Math.random() * 0.5),
+            topInset = Math.round(Math.random()) * inSet,
+            midInset = Math.round(Math.random()) * inSet,
+            btmInset = Math.round(Math.random()) * inSet;
         
         ctx.save();
         ctx.beginPath();
@@ -106,8 +110,14 @@ document.addEventListener('DOMContentLoaded', function(e) {
             y = 0;
             w = dWidth + dx;
             h = canvas.height;
-            ctx.lineTo(x + w - 100, y);
-            ctx.lineTo(x + w, y + h);
+            topInset *= w;
+            midInset *= w;
+            btmInset *= w;
+            ctx.lineTo(x + w - topInset, y);
+            if (hasMidPoint) {
+                ctx.lineTo(x + w - midInset, y + (h / 2));
+            }
+            ctx.lineTo(x + w - btmInset, y + h);
             ctx.lineTo(x, y + h);
             ctx.lineTo(x, y);
             
@@ -116,14 +126,20 @@ document.addEventListener('DOMContentLoaded', function(e) {
             y = 0;
             w = canvas.width - dx;
             h = canvas.height
-            ctx.moveTo(x + 100, y);
+            topInset *= w;
+            midInset *= w;
+            btmInset *= w;
+            ctx.moveTo(x + topInset, y);
             ctx.lineTo(x + w, y);
             ctx.lineTo(x + w, y + h);
-            ctx.lineTo(x, y + h);
-            ctx.lineTo(x + 100, y);
+            ctx.lineTo(x + btmInset, y + h);
+            if (hasMidPoint) {
+                ctx.lineTo(x + midInset, y + (h / 2));
+            }
+            ctx.lineTo(x + topInset, y);
         }
-        console.log(x, y, w, h);
         ctx.clip();
+        console.log(topInset, midInset, btmInset);
         // ctx.fillStyle = '#ffff00';
         // ctx.fillRect(x, y, w, h);
         ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
