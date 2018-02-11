@@ -1,4 +1,5 @@
 /**
+ * @see https://stackoverflow.com/questions/16221005/determine-orientation-of-photos-in-javascript
  * @see https://jmperezperez.com/drawing-edges-svg/
  */
 
@@ -21,10 +22,24 @@ document.addEventListener('DOMContentLoaded', function(e) {
     };
 
     const createCollage = () => {
-        const numImages = 5;
+        const numImages = 3;
         loadJSON(`json?type=image&amount=${numImages}`).then(data => {
+            // data = [
+            //     {
+            //         dir: '../../../Pictures/iPhone/2017-09-13 Berlijn/',
+            //         image: 'IMG_6568.JPG'
+            //     },{
+            //         dir: '../../../Pictures/iPhone/2017-09-13 Berlijn/',
+            //         image: 'IMG_6569.JPG'
+            //     },{
+            //         dir: '../../../Pictures/iPhone/2015-08-16 Berlijn/',
+            //         image: 'IMG_1599.JPG'
+            //     }
+            // ];
             console.log(data);
-            Promise.all(data.map(loadImage)).then(drawAll);
+            Promise.all(data.map(loadImage)).then(images => {
+                Promise.all(images.map(fixIPhoneRotation)).then(drawAll);
+            });
         });
     };
 
@@ -48,6 +63,39 @@ document.addEventListener('DOMContentLoaded', function(e) {
                 }
             };
             xobj.send(null);  
+        });
+    };
+
+    const fixIPhoneRotation = (img) => {
+        return new Promise((resolve, reject) => {
+            EXIF.getData(img, function() {
+                const make = EXIF.getTag(this, 'Make');
+                if (make && make.indexOf('Apple') > -1 && EXIF.getTag(this, 'Orientation') === 6) {
+                    console.log('start rotate', img.src);
+                    const angle = Math.PI / 2;
+            
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.height;
+                    canvas.height = img.width;    
+                    
+                    const ctx = canvas.getContext('2d');
+                    ctx.save();
+                    ctx.translate(canvas.width / 2, canvas.height / 2);
+                    ctx.rotate(angle);
+                    ctx.drawImage(img, -img.width / 2, -img.height / 2);
+                    ctx.restore();
+
+                    const rotatedImage = new Image();
+                    rotatedImage.src = canvas.toDataURL();
+                    rotatedImage.onload = () => {
+                        console.log('finished rotate');
+                        document.querySelector('.test').appendChild(rotatedImage);
+                        resolve(rotatedImage);
+                    };
+                } else {
+                    resolve(img);
+                }
+            });
         });
     };
     
@@ -88,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
             clipHeight = canvas.height,
             isLeft = !!Math.round(Math.random());
         
-        createPath(clipWidth, clipHeight, isLeft);
+        createPath(clipWidth, clipHeight, isLeft, 0.7);
         ({sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight} = processImage(img, clipWidth, clipHeight, isLeft));
         ctx.save();
         ctx.clip();
@@ -100,11 +148,11 @@ document.addEventListener('DOMContentLoaded', function(e) {
     }
     
     const drawCloseDistance = img => {
-        const clipWidth = (canvas.width * 0.2) + (Math.random() * (canvas.width * 0.4)),
+        const clipWidth = (canvas.width * 0.2) + (Math.random() * (canvas.width * 0.5)),
             clipHeight = canvas.height,
             isLeft = !!Math.round(Math.random());
         
-        createPath(clipWidth, clipHeight, isLeft);
+        createPath(clipWidth, clipHeight, isLeft, 0.9);
         ({sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight} = processImage(img, clipWidth, clipHeight, isLeft));
         ctx.save();
         ctx.clip();
@@ -115,13 +163,13 @@ document.addEventListener('DOMContentLoaded', function(e) {
     };
 
 
-    const createPath = (clipWidth, clipHeight, isLeft) => {
+    const createPath = (clipWidth, clipHeight, isLeft, maxInset) => {
         const x = isLeft ? 0 : canvas.width - clipWidth,
             y = 0,
             w = clipWidth,
             h = canvas.height,
             hasMidPoint = Math.random() > 0.3,
-            inSet = (Math.random() * 0.7) * clipWidth,
+            inSet = (Math.random() * maxInset) * clipWidth,
             topInset = Math.round(Math.random()) * inSet,
             midInset = Math.round(Math.random()) * inSet,
             btmInset = Math.round(Math.random()) * inSet;

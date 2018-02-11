@@ -1,3 +1,10 @@
 canvas {
     width: 100%;
 }
+
+.test {
+    width: 50%;
+}
+.test img {
+    width: 100%;
+}
