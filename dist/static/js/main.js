@@ -89,7 +89,6 @@ document.addEventListener('DOMContentLoaded', function(e) {
                     rotatedImage.src = canvas.toDataURL();
                     rotatedImage.onload = () => {
                         console.log('finished rotate');
-                        document.querySelector('.test').appendChild(rotatedImage);
                         resolve(rotatedImage);
                     };
                 } else {
