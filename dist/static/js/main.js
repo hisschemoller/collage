@@ -24,18 +24,6 @@ document.addEventListener('DOMContentLoaded', function(e) {
     const createCollage = () => {
         const numImages = 3;
         loadJSON(`json?type=image&amount=${numImages}`).then(data => {
-            // data = [
-            //     {
-            //         dir: '../../../Pictures/iPhone/2017-09-13 Berlijn/',
-            //         image: 'IMG_6568.JPG'
-            //     },{
-            //         dir: '../../../Pictures/iPhone/2017-09-13 Berlijn/',
-            //         image: 'IMG_6569.JPG'
-            //     },{
-            //         dir: '../../../Pictures/iPhone/2015-08-16 Berlijn/',
-            //         image: 'IMG_1599.JPG'
-            //     }
-            // ];
             console.log(data);
             Promise.all(data.map(loadImage)).then(images => {
                 Promise.all(images.map(fixIPhoneRotation)).then(drawAll);
@@ -71,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
             EXIF.getData(img, function() {
                 const make = EXIF.getTag(this, 'Make');
                 if (make && make.indexOf('Apple') > -1 && EXIF.getTag(this, 'Orientation') === 6) {
-                    console.log('start rotate', img.src);
+                    console.log('fixIPhoneRotation', img.src);
                     const angle = Math.PI / 2;
             
                     const canvas = document.createElement('canvas');
@@ -88,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
                     const rotatedImage = new Image();
                     rotatedImage.src = canvas.toDataURL();
                     rotatedImage.onload = () => {
-                        console.log('finished rotate');
+                        console.log('fixIPhoneRotation done');
                         resolve(rotatedImage);
                     };
                 } else {
@@ -142,8 +130,6 @@ document.addEventListener('DOMContentLoaded', function(e) {
         ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
         ctx.restore();
         ctx.lineWidth = 8;
-        // ctx.strokeStyle = '#ff0000';
-        // ctx.stroke();
     }
     
     const drawCloseDistance = img => {
@@ -157,8 +143,6 @@ document.addEventListener('DOMContentLoaded', function(e) {
         ctx.clip();
         ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
         ctx.restore();
-        // ctx.strokeStyle = '#00ff00';
-        // ctx.stroke();
     };
 
 
@@ -205,7 +189,6 @@ document.addEventListener('DOMContentLoaded', function(e) {
             dHeight = sHeight * scale,
             dx = isLeft ? 0 : canvas.width - clipWidth,
             dy = (canvas.height / 2) - (dHeight / 2);
-
         return {sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight};
     };
     
