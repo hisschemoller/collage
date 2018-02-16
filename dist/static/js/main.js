@@ -55,10 +55,11 @@ document.addEventListener('DOMContentLoaded', function(e) {
     };
 
     const fixIPhoneRotation = (img) => {
-        if (!img) {
-            resolve(null);
-        }
         return new Promise((resolve, reject) => {
+            resolve(img);
+            if (!img) {
+                resolve(null);
+            }
             EXIF.getData(img, function() {
                 const make = EXIF.getTag(this, 'Make');
                 if (make && make.indexOf('Apple') > -1 && EXIF.getTag(this, 'Orientation') === 6) {
