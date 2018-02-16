@@ -134,6 +134,8 @@ document.addEventListener('DOMContentLoaded', function(e) {
         ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
         ctx.restore();
         ctx.lineWidth = 8;
+        ctx.strokeStyle = '#ff0000';
+        ctx.stroke();
     }
     
     const drawCloseDistance = img => {
@@ -147,6 +149,9 @@ document.addEventListener('DOMContentLoaded', function(e) {
         ctx.clip();
         ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
         ctx.restore();
+        ctx.lineWidth = 8;
+        ctx.strokeStyle = '#00ff00';
+        ctx.stroke();
     };
 
 
@@ -159,26 +164,69 @@ document.addEventListener('DOMContentLoaded', function(e) {
             inSet = (Math.random() * maxInset) * clipWidth,
             topInset = Math.round(Math.random()) * inSet,
             midInset = Math.round(Math.random()) * inSet,
-            btmInset = Math.round(Math.random()) * inSet;
+            btmInset = Math.round(Math.random()) * inSet,
+            hasCurve = Math.random() > 0.8,
+            hasCurve2 = Math.random() > 0.8;
+        
+        let x1, y1, x2, y2, x3, y3;
         
         ctx.beginPath();
         if (isLeft) {
-            ctx.lineTo(x + w - topInset, y);
+            x1 = x + w - topInset;
+            y1 = y;
+            x2 = x + w - midInset;
+            y2 = y + (h / 2);
+            x3 = x + w - btmInset;
+            y3 = y + h;
+            ctx.lineTo(x1, y1);
             if (hasMidPoint) {
-                ctx.lineTo(x + w - midInset, y + (h / 2));
+                if (hasCurve) {
+                    createCurve(x1, y1, x2, y2);
+                } else {
+                    ctx.lineTo(x2, y2);
+                }
+                if (hasCurve2) {
+                    createCurve(x2, y2, x3, y3);
+                } else {
+                    ctx.lineTo(x3, y3);
+                }
+            } else {
+                if (hasCurve) {
+                    createCurve(x1, y1, x3, y3);
+                } else {
+                    ctx.lineTo(x3, y3);
+                }
             }
-            ctx.lineTo(x + w - btmInset, y + h);
             ctx.lineTo(x, y + h);
             ctx.lineTo(x, y);
         } else {
-            ctx.moveTo(x + topInset, y);
+            x1 = x + topInset;
+            y1 = y;
+            x2 = x + midInset;
+            y2 = y + (h / 2);
+            x3 = x + btmInset;
+            y3 = y + h;
+            ctx.moveTo(x1, y1);
             ctx.lineTo(x + w, y);
             ctx.lineTo(x + w, y + h);
-            ctx.lineTo(x + btmInset, y + h);
+            ctx.lineTo(x3, y3);
             if (hasMidPoint) {
-                ctx.lineTo(x + midInset, y + (h / 2));
+                if (hasCurve) {
+                    createCurve(x3, y3, x2, y2);
+                } else {
+                    ctx.lineTo(x2, y2);
+                }
+                if (hasCurve) {
+                    createCurve(x2, y2, x1, y1);
+                } else {
+                    ctx.lineTo(x1, y1);
+                }
             }
-            ctx.lineTo(x + topInset, y);
+            if (hasCurve) {
+                createCurve(x3, y3, x1, y1);
+            } else {
+                ctx.lineTo(x1, y1);
+            }
         }
         ctx.closePath();
     };
@@ -194,6 +242,14 @@ document.addEventListener('DOMContentLoaded', function(e) {
             dx = isLeft ? 0 : canvas.width - clipWidth,
             dy = (canvas.height / 2) - (dHeight / 2);
         return {sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight};
+    };
+
+    const createCurve = (x1, y1, x2, y2) => {
+        const cp1x = x1,
+            cp1y = y1,
+            cp2x = x2,
+            cp2y = y2;
+        ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x2, y2);
     };
     
     init();
