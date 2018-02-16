@@ -1,6 +1,6 @@
 # Collage App
 
-This application generates photo collages, compositions of each time three randomly chosen images.
+This application generates photo collages. A collage in this app is a composition of three randomly chosen images.
 
 It is a Node.js web application that loads images from directories on the local file system and shows the generated collage on a canvas element in the browser.
 
@@ -22,14 +22,10 @@ Clone the files from this Git repository.
 $ cd collage
 ```
 
-#### 3. Install the app's dependencies with either npm or yarn
+#### 3. Install the app's dependencies
 
 ```shell
 $ npm install
-```
-or
-```shell
-$ yarn install
 ```
 
 #### 4. Edit the configuration file
@@ -57,7 +53,7 @@ $ node index.js
 
 #### 6. Open the application in your web browser
 
-The app will be available on [http://localhost:3000/](http://localhost:3000/).
+The app will be available at [http://localhost:3000/](http://localhost:3000/).
 
 
 
