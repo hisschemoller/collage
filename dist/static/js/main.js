@@ -56,7 +56,6 @@ document.addEventListener('DOMContentLoaded', function(e) {
 
     const fixIPhoneRotation = (img) => {
         return new Promise((resolve, reject) => {
-            resolve(img);
             if (!img) {
                 resolve(null);
             }
@@ -133,9 +132,9 @@ document.addEventListener('DOMContentLoaded', function(e) {
         ctx.clip();
         ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
         ctx.restore();
-        ctx.lineWidth = 8;
-        ctx.strokeStyle = '#ff0000';
-        ctx.stroke();
+        // ctx.lineWidth = 8;
+        // ctx.strokeStyle = '#ff0000';
+        // ctx.stroke();
     }
     
     const drawCloseDistance = img => {
@@ -149,9 +148,9 @@ document.addEventListener('DOMContentLoaded', function(e) {
         ctx.clip();
         ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
         ctx.restore();
-        ctx.lineWidth = 8;
-        ctx.strokeStyle = '#00ff00';
-        ctx.stroke();
+        // ctx.lineWidth = 8;
+        // ctx.strokeStyle = '#00ff00';
+        // ctx.stroke();
     };
 
 
@@ -165,8 +164,8 @@ document.addEventListener('DOMContentLoaded', function(e) {
             topInset = Math.round(Math.random()) * inSet,
             midInset = Math.round(Math.random()) * inSet,
             btmInset = Math.round(Math.random()) * inSet,
-            hasCurve = Math.random() > 0.8,
-            hasCurve2 = Math.random() > 0.8;
+            hasCurve = Math.random() > 0.7,
+            hasCurve2 = Math.random() > 0.7;
         
         let x1, y1, x2, y2, x3, y3;
         
@@ -221,11 +220,12 @@ document.addEventListener('DOMContentLoaded', function(e) {
                 } else {
                     ctx.lineTo(x1, y1);
                 }
-            }
-            if (hasCurve) {
-                createCurve(x3, y3, x1, y1);
             } else {
-                ctx.lineTo(x1, y1);
+                if (hasCurve) {
+                    createCurve(x3, y3, x1, y1);
+                } else {
+                    ctx.lineTo(x1, y1);
+                }
             }
         }
         ctx.closePath();
@@ -245,10 +245,20 @@ document.addEventListener('DOMContentLoaded', function(e) {
     };
 
     const createCurve = (x1, y1, x2, y2) => {
-        const cp1x = x1,
-            cp1y = y1,
-            cp2x = x2,
+        let cp1x, cp1y, cp2x, cp2y;
+        const isConvex = Math.random() > 0.5,
+            strength = 0.3 + (Math.random() * 0.5);
+        if (isConvex) {
+            cp1x = x1 + ((x2 - x1) * strength);
+            cp1y = y1;
+            cp2x = x2;
+            cp2y = y2 - ((y2 - y1) * strength);
+        } else {
+            cp1x = x1;
+            cp1y = y1 + ((y2 - y1) * strength);
+            cp2x = x2 - ((x2 - x1) * strength);
             cp2y = y2;
+        }
         ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x2, y2);
     };
     
