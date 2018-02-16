@@ -14,7 +14,7 @@ It is a Node.js web application that loads images from directories on the local 
 
 #### 1. Get the latest version
 
-Clone the files from this Git repository.
+Clone the files in this Git repository to a directory on your computer.
 
 #### 2. Switch to the app's directory
 
