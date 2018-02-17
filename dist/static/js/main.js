@@ -22,11 +22,12 @@ document.addEventListener('DOMContentLoaded', function(e) {
     };
 
     const createCollage = () => {
-        const numImages = 3;
+        const numImages = 1;
         loadJSON(`json?type=image&amount=${numImages}`).then(data => {
             console.log(data);
+            // Promise.all(data.map(loadImage)).then(drawAll);
             Promise.all(data.map(loadImage)).then(images => {
-                Promise.all(images.map(fixIPhoneRotation)).then(drawAll);
+                Promise.all(images.map(getIPhoneRotated)).then(drawAll);
             });
         });
     };
@@ -106,23 +107,56 @@ document.addEventListener('DOMContentLoaded', function(e) {
         });
     };
     
-    const drawAll = images => {
-        for (let i = 0, n = images.length, num = 0; i < n; i++) {
-            if (images[i]) {
-                switch (num) {
+    const drawAll = (imageData) => {
+        console.log(arguments.length, arguments, imageData[0]);
+        let count = 0;
+        imageData.forEach(data => {
+            if (data.img) {
+                switch (count) {
                     case 0:
-                        drawBackground(images[i]);
+                        test(data.img, data.isRotated); // drawBackground(data.img, data.isRotated);
                         break;
                     case 1:
-                        drawMidDistance(images[i]);
+                        drawMidDistance(data.img, data.isRotated);
                         break;
                     case 2:
-                        drawCloseDistance(images[i]);
+                        drawCloseDistance(data.img, data.isRotated);
                         break;
                 }
-                num++;
+                count++;
             }
-        }
+        });
+    };
+
+    const test = (img, isRotated) => {
+        const sx = 100,
+            sy = 200,
+            sWidth = 800,
+            sHeight = 600,
+            dx = 100,
+            dy = 200,
+            dWidth = 400,
+            dHeight = 300,
+            strength = 0.5;
+        
+        ctx.beginPath();
+        ctx.moveTo(dx, dy);
+        ctx.bezierCurveTo(dx + (sWidth * strength), dy, dx + dWidth, dy+ dHeight - (dHeight * strength), dx + dWidth, dy+ dHeight);
+        ctx.lineTo(dx, dy+ dHeight);
+        ctx.lineTo(dx, dy);
+        ctx.closePath();
+        ctx.clip();
+
+        ctx.save();
+        ctx.translate(0, 0);
+        ctx.rotate(Math.PI / 2);
+        ctx.drawImage(img, sy, img.height - sWidth - sx, sHeight, sWidth, dy, 0 - dWidth - dx, dHeight, dWidth);
+
+        // ctx.rect(0, -400, 400, 400);
+        ctx.lineWidth = 8;
+        ctx.strokeStyle = '#ff0000';
+        ctx.stroke();
+        ctx.restore();
     };
 
     const drawBackground = img => {
