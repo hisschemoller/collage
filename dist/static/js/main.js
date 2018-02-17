@@ -160,6 +160,18 @@ document.addEventListener('DOMContentLoaded', function(e) {
     };
 
     const drawBackground = img => {
+    const rotateCoordinates = (img, _sx, _sy, _sWidth, _sHeight, _dx, _dy, _dWidth, _dHeight) => {
+        return {
+            sx: _sy,
+            sy: img.height - _sWidth - _sx,
+            sWidth: _sHeight,
+            sHeight: _sWidth,
+            dx: _dy,
+            dy: 0 - _dWidth - _dx,
+            dWidth: _dHeight,
+            dHeight: _dWidth
+        };
+    };
         let sWidth = 100 + (Math.random() * (img.width - 100)),
             sHeight = (canvas.height / canvas.width) * sWidth,
             sx = Math.random() * (img.width - sWidth),
