@@ -88,6 +88,23 @@ document.addEventListener('DOMContentLoaded', function(e) {
             });
         });
     };
+
+    const getIPhoneRotated = (img) => {
+        return new Promise((resolve, reject) => {
+            if (!img) {
+                resolve({ img, isrotated: false });
+            }
+            EXIF.getData(img, function() {
+                const make = EXIF.getTag(this, 'Make');
+                if (make && make.indexOf('Apple') > -1 && EXIF.getTag(this, 'Orientation') === 6) {
+                    console.log('getIPhoneRotated', img.src);
+                    resolve({ img, isrotated: true });
+                } else {
+                    resolve({ img, isrotated: false });
+                }
+            });
+        });
+    };
     
     const drawAll = images => {
         for (let i = 0, n = images.length, num = 0; i < n; i++) {
