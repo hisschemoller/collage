@@ -114,14 +114,14 @@ document.addEventListener('DOMContentLoaded', function(e) {
                     case 0:
                         // test(data.img, data.isRotated);
                         drawBackground(data.img, data.isRotated);
-                        // drawMidDistance(data.img, data.isRotated);
-                        // drawCloseDistance(data.img, data.isRotated);
+                        drawMidDistance(data.img, data.isRotated);
+                        drawCloseDistance(data.img, data.isRotated);
                         break;
                     case 1:
-                        drawMidDistance(data.img, data.isRotated);
+                        // drawMidDistance(data.img, data.isRotated);
                         break;
                     case 2:
-                        drawCloseDistance(data.img, data.isRotated);
+                        // drawCloseDistance(data.img, data.isRotated);
                         break;
                 }
                 count++;
@@ -280,8 +280,8 @@ document.addEventListener('DOMContentLoaded', function(e) {
             topInset = Math.round(Math.random()) * inSet,
             midInset = Math.round(Math.random()) * inSet,
             btmInset = Math.round(Math.random()) * inSet,
-            hasCurve = Math.random() > 0.7,
-            hasCurve2 = Math.random() > 0.7;
+            hasCurve = Math.random() > 0.5,
+            hasCurve2 = Math.random() > 0.5;
         
         let x1, y1, x2, y2, x3, y3;
         
