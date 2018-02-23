@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
     };
 
     const createCollage = () => {
-        const numImages = 3;
+        const numImages = 1;
         loadJSON(`json?type=image&amount=${numImages}`).then(data => {
             console.log(data);
             Promise.all(data.map(loadImage)).then(images => {
@@ -115,6 +115,8 @@ document.addEventListener('DOMContentLoaded', function(e) {
                     case 0:
                         // test(data.img, data.isRotated);
                         drawBackground(data.img, data.isRotated, isMirrored);
+                        drawMidDistance(data.img, data.isRotated, Math.random() >= 0.5);
+                        drawCloseDistance(data.img, data.isRotated, Math.random() >= 0.5);
                         break;
                     case 1:
                         drawMidDistance(data.img, data.isRotated, isMirrored);
