@@ -114,14 +114,12 @@ document.addEventListener('DOMContentLoaded', function(e) {
                     case 0:
                         // test(data.img, data.isRotated);
                         drawBackground(data.img, data.isRotated);
-                        drawMidDistance(data.img, data.isRotated);
-                        drawCloseDistance(data.img, data.isRotated);
                         break;
                     case 1:
-                        // drawMidDistance(data.img, data.isRotated);
+                        drawMidDistance(data.img, data.isRotated);
                         break;
                     case 2:
-                        // drawCloseDistance(data.img, data.isRotated);
+                        drawCloseDistance(data.img, data.isRotated);
                         break;
                 }
                 count++;
