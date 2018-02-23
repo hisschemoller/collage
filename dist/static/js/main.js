@@ -110,16 +110,17 @@ document.addEventListener('DOMContentLoaded', function(e) {
         let count = 0;
         imageData.forEach(data => {
             if (data.img) {
+                const isMirrored = Math.random() >= 0.5;
                 switch (count) {
                     case 0:
                         // test(data.img, data.isRotated);
-                        drawBackground(data.img, data.isRotated);
+                        drawBackground(data.img, data.isRotated, isMirrored);
                         break;
                     case 1:
-                        drawMidDistance(data.img, data.isRotated);
+                        drawMidDistance(data.img, data.isRotated, isMirrored);
                         break;
                     case 2:
-                        drawCloseDistance(data.img, data.isRotated);
+                        drawCloseDistance(data.img, data.isRotated, isMirrored);
                         break;
                 }
                 count++;
@@ -136,7 +137,8 @@ document.addEventListener('DOMContentLoaded', function(e) {
             dy = 200,
             dWidth = 400,
             dHeight = 300,
-            strength = 0.5;
+            strength = 0.5,
+            isMirrored = true;
         
         ctx.beginPath();
         ctx.moveTo(dx, dy);
@@ -145,14 +147,22 @@ document.addEventListener('DOMContentLoaded', function(e) {
         ctx.lineTo(dx, dy);
         ctx.closePath();
         ctx.clip();
+        ctx.save();
+        ctx.translate(0, 0);
+
+        if (isMirrored) {
+            ctx.translate((dx * 2) + dWidth, 0);
+            ctx.scale(-1, 1);
+        }
         
         if (isRotated) {
             ({sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight} = rotateCoordinates(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight));
-        }     
+        }
 
-        ctx.save();
-        ctx.translate(0, 0);
-        ctx.rotate(Math.PI / 2);
+        if (isRotated) {
+            ctx.rotate(Math.PI / 2);
+        }
+
         ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
 
         ctx.lineWidth = 8;
@@ -174,7 +184,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
         };
     };
 
-    const drawBackground = (img, isRotated) => {
+    const drawBackground = (img, isRotated, isMirrored) => {
         const imgWidth = isRotated ? img.height : img.width,
             imgHeight = isRotated ? img.width : img.height;
 
@@ -187,12 +197,17 @@ document.addEventListener('DOMContentLoaded', function(e) {
             dHeight = sHeight * scale,
             dx = Math.random() * (canvas.width - dWidth),
             dy = (canvas.height / 2) - (dHeight / 2);
+
+        ctx.save();
+
+        if (isMirrored) {
+            ctx.translate((dx * 2) + dWidth, 0);
+            ctx.scale(-1, 1);
+        }
         
         if (isRotated) {
             ({sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight} = rotateCoordinates(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight));
         }
-
-        ctx.save();
 
         if (isRotated) {
             ctx.rotate(Math.PI / 2);
@@ -203,7 +218,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
         ctx.restore();
     };
 
-    const drawMidDistance = (img, isRotated) => {
+    const drawMidDistance = (img, isRotated, isMirrored) => {
         const imgWidth = isRotated ? img.height : img.width,
             imgHeight = isRotated ? img.width : img.height;
 
@@ -217,6 +232,11 @@ document.addEventListener('DOMContentLoaded', function(e) {
 
         ctx.save();
         ctx.clip();
+        
+        if (isMirrored) {
+            ctx.translate((dx * 2) + dWidth, 0);
+            ctx.scale(-1, 1);
+        }
 
         if (isRotated) {
             ({sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight} = rotateCoordinates(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight));
@@ -235,7 +255,7 @@ document.addEventListener('DOMContentLoaded', function(e) {
         ctx.restore();
     }
     
-    const drawCloseDistance = (img, isRotated) => {
+    const drawCloseDistance = (img, isRotated, isMirrored) => {
         const imgWidth = isRotated ? img.height : img.width,
             imgHeight = isRotated ? img.width : img.height;
 
@@ -249,6 +269,11 @@ document.addEventListener('DOMContentLoaded', function(e) {
 
         ctx.save();
         ctx.clip();
+        
+        if (isMirrored) {
+            ctx.translate((dx * 2) + dWidth, 0);
+            ctx.scale(-1, 1);
+        }
 
         if (isRotated) {
             ({sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight} = rotateCoordinates(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight));
