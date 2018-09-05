@@ -1,10 +1,13 @@
 {
-    "name": "random-images",
-    "version": "0.0.1",
+    "name": "collage-app",
+    "version": "1.0.0",
     "main": "index.js",
-    "repository": "https://github.com/WouterHisschemoller/random-images.git",
+    "repository": "https://github.com/hisschemoller/collage.git",
     "author": "Wouter Hisschemöller <wouter.hisschemoller@gmail.com>",
     "license": "MIT",
+    "scripts": {
+        "start": "node index.js"
+    },
     "dependencies": {
         "exif-js": "^2.3.0",
         "express": "^4.16.1"
