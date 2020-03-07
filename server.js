@@ -2,16 +2,20 @@
  * @see https://stackoverflow.com/questions/40812254/how-to-get-a-random-image-from-the-images-directory-in-an-express-environment
  * @see https://stackoverflow.com/questions/5827612/node-js-fs-readdir-recursive-directory-search
  */
-var express = require('express'),
-    app = express(),
-    server = require('http').createServer(app),
-    fs = require('fs'),
-    path = require('path'),
-    config = require('./config.json'),
-    allData = [],
-    numImages = 0;
 
-server.listen(3000);
+const express = require('express');
+const app = express();
+const server = require('http').createServer(app);
+const fs = require('fs');
+const path = require('path');
+const port = process.env.PORT || 3002;
+const config = require('./config.json');
+const allData = [];
+let numImages = 0;
+
+server.listen(port, () => {
+    console.log('listening on %d', port);
+});
 
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/dist/index.html');
@@ -55,9 +59,9 @@ function getAllDirectories(dirs) {
         allData.forEach(dirData => {
             dirData.startIndex = numImages;
             numImages += dirData.images.length;
-            console.log(`dirData: ${dirData.startIndex} - ${dirData.images.length} - ${numImages}`);
+            console.log(`dir data: ${dirData.startIndex} - ${dirData.images.length} - ${numImages}`);
         });
-        console.log('numImages', numImages);
+        console.log('num images', numImages);
     });
 }
 
