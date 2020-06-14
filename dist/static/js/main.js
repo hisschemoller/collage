@@ -107,25 +107,24 @@ document.addEventListener('DOMContentLoaded', function(e) {
     };
     
     const drawAll = (imageData) => {
-        let count = 0;
-        imageData.forEach(data => {
-            if (data.img) {
+        imageData.forEach((data, index) => {
+            const { img, isRotated } = data;
+            if (img) {
                 const isMirrored = Math.random() >= 0.5;
-                switch (count) {
+                switch (index) {
                     case 0:
-                        // test(data.img, data.isRotated);
-                        drawBackground(data.img, data.isRotated, isMirrored);
-                        drawMidDistance(data.img, data.isRotated, Math.random() >= 0.5);
-                        drawCloseDistance(data.img, data.isRotated, Math.random() >= 0.5);
+                        // test(img, isRotated);
+                        drawBackground(img, isRotated, isMirrored);
+                        drawMidDistance(img, isRotated, Math.random() >= 0.5);
+                        drawCloseDistance(img, isRotated, Math.random() >= 0.5);
                         break;
                     case 1:
-                        drawMidDistance(data.img, data.isRotated, isMirrored);
+                        drawMidDistance(img, isRotated, isMirrored);
                         break;
                     case 2:
-                        drawCloseDistance(data.img, data.isRotated, isMirrored);
+                        drawCloseDistance(img, isRotated, isMirrored);
                         break;
                 }
-                count++;
             }
         });
     };
@@ -258,12 +257,11 @@ document.addEventListener('DOMContentLoaded', function(e) {
     }
     
     const drawCloseDistance = (img, isRotated, isMirrored) => {
-        const imgWidth = isRotated ? img.height : img.width,
-            imgHeight = isRotated ? img.width : img.height;
-
-        const clipWidth = (canvas.width * 0.2) + (Math.random() * (canvas.width * 0.5)),
-            clipHeight = canvas.height,
-            isLeft = !!Math.round(Math.random());
+        const imgWidth = isRotated ? img.height : img.width;
+        const imgHeight = isRotated ? img.width : img.height;
+        const clipWidth = (canvas.width * 0.2) + (Math.random() * (canvas.width * 0.5));
+        const clipHeight = canvas.height;
+        const isLeft = !!Math.round(Math.random());
         
         let {sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight} = processImage(imgWidth, imgHeight, clipWidth, clipHeight, isLeft);
         
