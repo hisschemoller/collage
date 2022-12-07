@@ -10,7 +10,7 @@
     },
     "dependencies": {
         "exif-js": "^2.3.0",
-        "express": "^4.17.1"
+        "express": "^4.17.3"
     },
     "devDependencies": {}
 }
